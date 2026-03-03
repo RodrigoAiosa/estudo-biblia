@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ramificações da Bíblia</title>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel+Decorative:wght@400;700&family=Crimson+Pro:ital,wght@0,300;0,400;0,600;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --gold: #c9a84c;
+    --gold-light: #e8c97a;
+    --gold-dark: #8a6a1f;
+    --parch: #f5ead6;
+    --parch-dark: #e8d5b0;
+    --ink: #2a1a08;
+    --ink-mid: #5a3e1b;
+    --old: #7a3a1a;
+    --old-light: #c4622a;
+    --new: #1a3a6e;
+    --new-light: #3b70c4;
+    --shadow: rgba(42,26,8,0.25);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--ink);
+    font-family: 'Crimson Pro', Georgia, serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  .bg-texture {
+    position: fixed; inset: 0;
+    background:
+      radial-gradient(ellipse at 20% 20%, rgba(201,168,76,0.08) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 80%, rgba(201,168,76,0.06) 0%, transparent 60%),
+      repeating-linear-gradient(0deg, transparent, transparent 40px, rgba(201,168,76,0.015) 40px, rgba(201,168,76,0.015) 41px),
+      repeating-linear-gradient(90deg, transparent, transparent 40px, rgba(201,168,76,0.015) 40px, rgba(201,168,76,0.015) 41px);
+    pointer-events: none; z-index: 0;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 40px 20px 80px;
+  }
+
+  header {
+    text-align: center;
+    padding: 40px 0 50px;
+    position: relative;
+  }
+  header::before, header::after {
+    content: '';
+    display: block;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--gold), transparent);
+    margin: 12px auto;
+    width: 60%;
+  }
+  .title-main {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    color: var(--gold-light);
+    letter-spacing: 0.06em;
+    text-shadow: 0 0 40px rgba(201,168,76,0.4), 0 2px 4px rgba(0,0,0,0.8);
+    line-height: 1.2;
+  }
+  .title-sub {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    color: rgba(232,201,122,0.6);
+    font-size: 1.15rem;
+    margin-top: 6px;
+    letter-spacing: 0.12em;
+  }
+  .ornament {
+    color: var(--gold);
+    font-size: 1.5rem;
+    display: block;
+    margin: 4px 0;
+    opacity: 0.7;
+  }
+
+  .two-cols {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 28px;
+    margin-top: 10px;
+  }
+  @media (max-width: 700px) {
+    .two-cols { grid-template-columns: 1fr; }
+  }
+
+  .testament-block {
+    border-radius: 4px;
+    overflow: hidden;
+    border: 1px solid;
+    box-shadow: 0 8px 40px rgba(0,0,0,0.5);
+    animation: rise 0.7s ease both;
+  }
+  .testament-block.old { border-color: var(--old); animation-delay: 0.1s; }
+  .testament-block.new { border-color: var(--new); animation-delay: 0.3s; }
+
+  @keyframes rise {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .testament-header {
+    padding: 20px 24px 16px;
+    cursor: pointer;
+    user-select: none;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    position: relative;
+    transition: filter 0.2s;
+  }
+  .testament-header:hover { filter: brightness(1.1); }
+  .old .testament-header {
+    background: linear-gradient(135deg, #6b2a10 0%, #3d1505 100%);
+  }
+  .new .testament-header {
+    background: linear-gradient(135deg, #132f60 0%, #061428 100%);
+  }
+  .t-icon { font-size: 2rem; flex-shrink: 0; }
+  .t-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+    letter-spacing: 0.05em;
+    line-height: 1.3;
+  }
+  .t-count {
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.9rem;
+    color: rgba(232,201,122,0.65);
+    margin-top: 2px;
+  }
+  .expand-arrow {
+    margin-left: auto;
+    color: var(--gold);
+    font-size: 1.2rem;
+    transition: transform 0.35s ease;
+    flex-shrink: 0;
+  }
+  .testament-block.open .expand-arrow { transform: rotate(180deg); }
+
+  .testament-body {
+    background: rgba(20,12,4,0.85);
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.55s cubic-bezier(0.4,0,0.2,1);
+  }
+  .testament-block.open .testament-body { max-height: 5000px; }
+
+  .section-list { padding: 12px 0 8px; }
+
+  .section-item {
+    border-bottom: 1px solid rgba(201,168,76,0.07);
+  }
+  .section-item:last-child { border-bottom: none; }
+
+  .section-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 11px 20px 11px 24px;
+    cursor: pointer;
+    transition: background 0.18s;
+    user-select: none;
+  }
+  .section-header:hover { background: rgba(201,168,76,0.06); }
+
+  .sec-dot {
+    width: 9px; height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+    border: 2px solid;
+  }
+  .old .sec-dot { background: var(--old-light); border-color: var(--old); }
+  .new .sec-dot { background: var(--new-light); border-color: var(--new); }
+
+  .sec-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.78rem;
+    letter-spacing: 0.06em;
+    color: var(--gold-light);
+    flex: 1;
+  }
+  .sec-count-badge {
+    font-size: 0.72rem;
+    font-style: italic;
+    color: rgba(232,201,122,0.5);
+    white-space: nowrap;
+    font-family: 'Crimson Pro', serif;
+  }
+  .sec-arrow {
+    color: rgba(201,168,76,0.5);
+    font-size: 0.8rem;
+    transition: transform 0.3s;
+    flex-shrink: 0;
+  }
+  .section-item.open .sec-arrow { transform: rotate(90deg); }
+
+  .books-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 6px;
+    padding: 6px 20px 14px 38px;
+    max-height: 0;
+    overflow: hidden;
+    transition: max-height 0.4s ease, padding 0.3s;
+  }
+  .section-item.open .books-grid { max-height: 800px; }
+
+  .book-card {
+    background: rgba(201,168,76,0.05);
+    border: 1px solid rgba(201,168,76,0.12);
+    border-radius: 3px;
+    padding: 7px 10px;
+    cursor: pointer;
+    transition: background 0.15s, border-color 0.15s, transform 0.15s;
+    position: relative;
+  }
+  .book-card:hover {
+    background: rgba(201,168,76,0.13);
+    border-color: rgba(201,168,76,0.35);
+    transform: translateY(-1px);
+  }
+  .book-card.active {
+    background: rgba(201,168,76,0.18);
+    border-color: var(--gold);
+  }
+  .book-name {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.88rem;
+    color: var(--parch);
+    line-height: 1.3;
+  }
+  .book-chapters {
+    font-size: 0.72rem;
+    color: rgba(232,201,122,0.45);
+    margin-top: 2px;
+  }
+
+  /* Info Panel */
+  .info-panel {
+    position: fixed;
+    bottom: 0; left: 0; right: 0;
+    background: linear-gradient(180deg, rgba(26,16,4,0.97) 0%, rgba(16,8,2,0.99) 100%);
+    border-top: 2px solid var(--gold-dark);
+    padding: 18px 24px 22px;
+    transform: translateY(100%);
+    transition: transform 0.4s cubic-bezier(0.4,0,0.2,1);
+    z-index: 100;
+    box-shadow: 0 -8px 40px rgba(0,0,0,0.7);
+    max-height: 40vh;
+    overflow-y: auto;
+  }
+  .info-panel.visible { transform: translateY(0); }
+  .info-panel-inner { max-width: 900px; margin: 0 auto; display: flex; gap: 24px; align-items: flex-start; }
+  .info-close {
+    position: absolute; top: 14px; right: 18px;
+    background: none; border: none; color: var(--gold); font-size: 1.3rem;
+    cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+  }
+  .info-close:hover { opacity: 1; }
+  .info-book-name {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.2rem;
+    color: var(--gold-light);
+    margin-bottom: 4px;
+  }
+  .info-meta {
+    font-style: italic;
+    color: rgba(232,201,122,0.55);
+    font-size: 0.88rem;
+    margin-bottom: 10px;
+  }
+  .info-desc {
+    color: var(--parch-dark);
+    font-size: 1rem;
+    line-height: 1.65;
+    max-width: 700px;
+  }
+  .info-tag {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 0.72rem;
+    letter-spacing: 0.08em;
+    font-family: 'Cinzel Decorative', serif;
+    margin-bottom: 8px;
+  }
+  .tag-old { background: rgba(122,58,26,0.5); color: var(--old-light); border: 1px solid var(--old); }
+  .tag-new { background: rgba(26,58,110,0.5); color: var(--new-light); border: 1px solid var(--new); }
+
+  /* Common Points Button */
+  .common-btn {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin: 0 20px 12px 38px;
+    padding: 8px 14px;
+    background: rgba(201,168,76,0.06);
+    border: 1px dashed rgba(201,168,76,0.3);
+    border-radius: 4px;
+    color: rgba(232,201,122,0.65);
+    cursor: pointer;
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    width: calc(100% - 58px);
+  }
+  .section-item.open .common-btn { max-height: 60px; opacity: 1; }
+  .common-btn:hover { background: rgba(201,168,76,0.14); border-color: rgba(201,168,76,0.6); color: var(--gold-light); }
+
+  /* Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.78);
+    z-index: 200;
+    display: flex; align-items: center; justify-content: center;
+    padding: 20px;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.visible { opacity: 1; pointer-events: all; }
+  .modal-box {
+    background: linear-gradient(160deg, #1e1006 0%, #110a02 100%);
+    border: 1px solid var(--gold-dark);
+    border-radius: 6px;
+    max-width: 680px; width: 100%;
+    max-height: 85vh; overflow-y: auto;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.8);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+  .modal-overlay.visible .modal-box { transform: translateY(0) scale(1); }
+  .modal-header {
+    padding: 22px 50px 16px 24px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    position: sticky; top: 0;
+    background: linear-gradient(160deg, #1e1006 0%, #110a02 100%);
+    z-index: 1;
+  }
+  .modal-section-tag {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.62rem; letter-spacing: 0.12em;
+    color: var(--gold-dark); margin-bottom: 5px;
+  }
+  .modal-title { font-family: 'Cinzel Decorative', serif; font-size: 1.05rem; color: var(--gold-light); }
+  .modal-subtitle { font-style: italic; color: rgba(232,201,122,0.5); font-size: 0.85rem; margin-top: 3px; }
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none;
+    color: rgba(201,168,76,0.6); font-size: 1.2rem;
+    cursor: pointer; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--gold-light); }
+  .modal-body { padding: 20px 24px 28px; }
+  .common-grid { display: flex; flex-direction: column; gap: 12px; }
+  .common-card {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-left: 3px solid var(--gold-dark);
+    border-radius: 0 4px 4px 0;
+    padding: 13px 16px;
+    animation: slideIn 0.4s ease both;
+  }
+  .common-card:nth-child(2){animation-delay:.05s} .common-card:nth-child(3){animation-delay:.1s}
+  .common-card:nth-child(4){animation-delay:.15s} .common-card:nth-child(5){animation-delay:.2s}
+  .common-card:nth-child(6){animation-delay:.25s} .common-card:nth-child(7){animation-delay:.3s}
+  @keyframes slideIn { from{opacity:0;transform:translateX(-10px)} to{opacity:1;transform:translateX(0)} }
+  .common-card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.75rem; color: var(--gold);
+    letter-spacing: 0.06em; margin-bottom: 6px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .common-card-text { font-size: 0.96rem; color: var(--parch-dark); line-height: 1.65; }
+  .common-books-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
+  .common-book-tag {
+    background: rgba(201,168,76,0.1); border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 3px; padding: 2px 9px;
+    font-size: 0.78rem; color: rgba(232,201,122,0.75); font-style: italic;
+  }
+
+  /* Stats bar */
+  .stats-bar {
+    display: flex;
+    justify-content: center;
+    gap: 40px;
+    padding: 18px 0 8px;
+    flex-wrap: wrap;
+  }
+  .stat {
+    text-align: center;
+    animation: rise 0.7s ease both;
+  }
+  .stat:nth-child(2) { animation-delay: 0.15s; }
+  .stat:nth-child(3) { animation-delay: 0.25s; }
+  .stat-num {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.6rem;
+    color: var(--gold-light);
+    display: block;
+    line-height: 1;
+  }
+  .stat-label {
+    font-style: italic;
+    color: rgba(232,201,122,0.5);
+    font-size: 0.82rem;
+    margin-top: 3px;
+  }
+  .stat-divider {
+    width: 1px;
+    background: linear-gradient(180deg, transparent, var(--gold-dark), transparent);
+    height: 40px;
+    align-self: center;
+  }
+
+  /* Common Points Button */
+  .common-btn {
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin: 4px 20px 12px 38px;
+    background: rgba(201,168,76,0.08);
+    border: 1px dashed rgba(201,168,76,0.3);
+    border-radius: 4px;
+    padding: 8px 14px;
+    cursor: pointer;
+    color: rgba(232,201,122,0.7);
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+    font-size: 0.88rem;
+    transition: all 0.2s;
+    width: calc(100% - 58px);
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+  }
+  .section-item.open .common-btn {
+    max-height: 60px;
+    opacity: 1;
+  }
+  .common-btn:hover {
+    background: rgba(201,168,76,0.15);
+    border-color: rgba(201,168,76,0.6);
+    color: var(--gold-light);
+  }
+  .common-btn-icon { font-size: 1rem; }
+
+  /* Common Points Modal */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75);
+    z-index: 200;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s;
+  }
+  .modal-overlay.visible {
+    opacity: 1;
+    pointer-events: all;
+  }
+  .modal-box {
+    background: linear-gradient(160deg, #1e1006 0%, #110a02 100%);
+    border: 1px solid var(--gold-dark);
+    border-radius: 6px;
+    max-width: 680px;
+    width: 100%;
+    max-height: 85vh;
+    overflow-y: auto;
+    box-shadow: 0 20px 80px rgba(0,0,0,0.8), 0 0 0 1px rgba(201,168,76,0.1);
+    transform: translateY(20px) scale(0.97);
+    transition: transform 0.35s cubic-bezier(0.4,0,0.2,1);
+    position: relative;
+  }
+  .modal-overlay.visible .modal-box {
+    transform: translateY(0) scale(1);
+  }
+  .modal-header {
+    padding: 22px 24px 16px;
+    border-bottom: 1px solid rgba(201,168,76,0.15);
+    position: sticky; top: 0;
+    background: linear-gradient(160deg, #1e1006 0%, #110a02 100%);
+    z-index: 1;
+  }
+  .modal-section-tag {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.12em;
+    color: var(--gold-dark);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .modal-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 1.1rem;
+    color: var(--gold-light);
+  }
+  .modal-subtitle {
+    font-style: italic;
+    color: rgba(232,201,122,0.5);
+    font-size: 0.85rem;
+    margin-top: 3px;
+  }
+  .modal-close {
+    position: absolute; top: 16px; right: 18px;
+    background: none; border: none;
+    color: rgba(201,168,76,0.6); font-size: 1.2rem;
+    cursor: pointer; transition: color 0.2s;
+  }
+  .modal-close:hover { color: var(--gold-light); }
+  .modal-body { padding: 20px 24px 28px; }
+
+  .common-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .common-card {
+    background: rgba(201,168,76,0.04);
+    border: 1px solid rgba(201,168,76,0.1);
+    border-left: 3px solid var(--gold-dark);
+    border-radius: 0 4px 4px 0;
+    padding: 14px 16px;
+    animation: slideIn 0.4s ease both;
+  }
+  .common-card:nth-child(2) { animation-delay: 0.05s; }
+  .common-card:nth-child(3) { animation-delay: 0.10s; }
+  .common-card:nth-child(4) { animation-delay: 0.15s; }
+  .common-card:nth-child(5) { animation-delay: 0.20s; }
+  .common-card:nth-child(6) { animation-delay: 0.25s; }
+  @keyframes slideIn {
+    from { opacity: 0; transform: translateX(-10px); }
+    to   { opacity: 1; transform: translateX(0); }
+  }
+  .common-card-title {
+    font-family: 'Cinzel Decorative', serif;
+    font-size: 0.78rem;
+    color: var(--gold);
+    letter-spacing: 0.06em;
+    margin-bottom: 6px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .common-card-title .ci { font-size: 1rem; }
+  .common-card-text {
+    font-family: 'Crimson Pro', serif;
+    font-size: 0.97rem;
+    color: var(--parch-dark);
+    line-height: 1.65;
+  }
+  .common-books-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin-top: 10px;
+  }
+  .common-book-tag {
+    background: rgba(201,168,76,0.1);
+    border: 1px solid rgba(201,168,76,0.2);
+    border-radius: 3px;
+    padding: 2px 9px;
+    font-size: 0.78rem;
+    color: rgba(232,201,122,0.75);
+    font-family: 'Crimson Pro', serif;
+    font-style: italic;
+  }
+</style>
+</head>
+<body>
+<div class="bg-texture"></div>
+<div class="container">
+  <header>
+    <span class="ornament">✦</span>
+    <div class="title-main">Ramificações da Bíblia Sagrada</div>
+    <div class="title-sub">Velho Testamento & Novo Testamento</div>
+    <span class="ornament">✦</span>
+  </header>
+
+  <div class="stats-bar">
+    <div class="stat"><span class="stat-num">66</span><div class="stat-label">Livros no total</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num">39</span><div class="stat-label">Velho Testamento</div></div>
+    <div class="stat-divider"></div>
+    <div class="stat"><span class="stat-num">27</span><div class="stat-label">Novo Testamento</div></div>
+  </div>
+
+  <div class="two-cols" id="root"></div>
+</div>
+
+<!-- Common Points Modal -->
+<div class="modal-overlay" id="commonModal" onclick="closeModal(event)">
+  <div class="modal-box">
+    <div class="modal-header">
+      <div class="modal-section-tag" id="modalTag"></div>
+      <div class="modal-title" id="modalTitle"></div>
+      <div class="modal-subtitle" id="modalSubtitle"></div>
+      <button class="modal-close" onclick="closeCommonModal()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="common-grid" id="commonGrid"></div>
+    </div>
+  </div>
+</div>
+
+<div class="info-panel" id="infoPanel">
+  <button class="info-close" onclick="closeInfo()">✕</button>
+  <div class="info-panel-inner">
+    <div>
+      <div id="infoTag" class="info-tag"></div>
+      <div class="info-book-name" id="infoName"></div>
+      <div class="info-meta" id="infoMeta"></div>
+      <div class="info-desc" id="infoDesc"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+const data = {
+  old: {
+    label: "Velho Testamento",
+    icon: "📜",
+    count: "39 livros",
+    sections: [
+      {
+        name: "Pentateuco",
+        desc: "Os cinco livros de Moisés — a Lei (Torá)",
+        books: [
+          { name: "Gênesis", ch: 50, desc: "A criação do mundo, a queda do homem, o dilúvio, os patriarcas Abraão, Isaque, Jacó e José." },
+          { name: "Êxodo", ch: 40, desc: "A libertação dos israelitas do Egito por Moisés, o Mar Vermelho e a entrega da Lei no Sinai." },
+          { name: "Levítico", ch: 27, desc: "Leis cerimoniais e morais para o povo de Israel: sacrifícios, pureza e santidade." },
+          { name: "Números", ch: 36, desc: "A jornada dos israelitas pelo deserto por quarenta anos após a recusa de entrar em Canaã." },
+          { name: "Deuteronômio", ch: 34, desc: "Os últimos discursos de Moisés, revisando a Lei antes de Israel entrar na Terra Prometida." },
+        ]
+      },
+      {
+        name: "Livros Históricos",
+        desc: "A história de Israel: conquista, juízes, reis e exílio",
+        books: [
+          { name: "Josué", ch: 24, desc: "A conquista e divisão da Terra Prometida sob a liderança de Josué." },
+          { name: "Juízes", ch: 21, desc: "Ciclos de infidelidade, opressão e libertação por juízes como Débora, Gideão e Sansão." },
+          { name: "Rute", ch: 4, desc: "A história de lealdade e redenção de uma mulher moabita que segue sua sogra Noemi." },
+          { name: "1 Samuel", ch: 31, desc: "Samuel, o último juiz; Saul, o primeiro rei; e a ascensão de Davi." },
+          { name: "2 Samuel", ch: 24, desc: "O reinado de Davi: triunfos, pecados e consequências." },
+          { name: "1 Reis", ch: 22, desc: "Salomão e seu templo; a divisão do reino em Israel e Judá." },
+          { name: "2 Reis", ch: 25, desc: "A queda de Israel (722 a.C.) e de Judá (586 a.C.) e o exílio babilônico." },
+          { name: "1 Crônicas", ch: 29, desc: "Genealogias e o reinado de Davi sob perspectiva sacerdotal." },
+          { name: "2 Crônicas", ch: 36, desc: "O templo de Salomão e a história de Judá até o exílio." },
+          { name: "Esdras", ch: 10, desc: "O retorno dos exilados à Judá e a restauração do templo." },
+          { name: "Neemias", ch: 13, desc: "A reconstrução dos muros de Jerusalém e reforma espiritual do povo." },
+          { name: "Ester", ch: 10, desc: "Uma jovem judaica torna-se rainha persa e salva seu povo de um massacre." },
+        ]
+      },
+      {
+        name: "Livros Poéticos",
+        desc: "Sabedoria, poesia e louvor",
+        books: [
+          { name: "Jó", ch: 42, desc: "Um homem justo enfrenta sofrimentos extremos; questiona Deus sobre o mal e recebe resposta divina." },
+          { name: "Salmos", ch: 150, desc: "150 hinos e poemas de louvor, lamento, gratidão e meditação, atribuídos principalmente a Davi." },
+          { name: "Provérbios", ch: 31, desc: "Máximas de sabedoria prática para uma vida reta, atribuídas principalmente a Salomão." },
+          { name: "Eclesiastes", ch: 12, desc: "Reflexões do Pregador sobre o significado da vida, a vaidade das coisas e o temor a Deus." },
+          { name: "Cântico dos Cânticos", ch: 8, desc: "Poema de amor entre dois amantes, interpretado como símbolo do amor de Deus por seu povo." },
+        ]
+      },
+      {
+        name: "Profetas Maiores",
+        desc: "Grandes mensagens proféticas de julgamento e restauração",
+        books: [
+          { name: "Isaías", ch: 66, desc: "Profecias sobre o julgamento de Israel e as nações, o servo sofredor e a futura restauração gloriosa." },
+          { name: "Jeremias", ch: 52, desc: "O profeta 'choroso' anuncia a queda de Jerusalém e a nova aliança que Deus fará com seu povo." },
+          { name: "Lamentações", ch: 5, desc: "Poemas de luto sobre a destruição de Jerusalém e o exílio babilônico." },
+          { name: "Ezequiel", ch: 48, desc: "Visões sobrenaturais, o vale dos ossos secos, e profecias sobre a restauração de Israel." },
+          { name: "Daniel", ch: 12, desc: "Fé no exílio babilônico, interpretação de sonhos e visões apocalípticas do fim dos tempos." },
+        ]
+      },
+      {
+        name: "Profetas Menores",
+        desc: "Doze livros proféticos mais breves",
+        books: [
+          { name: "Oseias", ch: 14, desc: "O casamento simbólico de Oseias ilustra a infidelidade de Israel e o amor perseverante de Deus." },
+          { name: "Joel", ch: 3, desc: "Uma praga de gafanhotos anuncia o Dia do Senhor e a promessa do derramamento do Espírito." },
+          { name: "Amós", ch: 9, desc: "Denúncia da injustiça social em Israel e chamado ao arrependimento e à justiça." },
+          { name: "Obadias", ch: 1, desc: "Julgamento sobre Edom por sua hostilidade a Israel no dia de sua calamidade." },
+          { name: "Jonas", ch: 4, desc: "O profeta relutante enviado a Nínive; a misericórdia de Deus que se estende além de Israel." },
+          { name: "Miquéias", ch: 7, desc: "Corrupção dos líderes de Israel, profecias sobre Belém e o chamado à justiça, amor e humildade." },
+          { name: "Naum", ch: 3, desc: "Profecia da destruição de Nínive e a vingança divina sobre os opressores." },
+          { name: "Habacuque", ch: 3, desc: "Diálogo com Deus sobre a injustiça; a fé do justo viverá." },
+          { name: "Sofonias", ch: 3, desc: "O Dia do Senhor como julgamento universal e promessa de restauração para um remanescente humilde." },
+          { name: "Ageu", ch: 2, desc: "Incentivo para reconstruir o Templo após o retorno do exílio." },
+          { name: "Zacarias", ch: 14, desc: "Visões apocalípticas, o rei montado em jumento e a esperança escatológica." },
+          { name: "Malaquias", ch: 4, desc: "Última voz profética: acusações de infidelidade e promessa do mensageiro que preparará o caminho." },
+        ]
+      },
+    ]
+  },
+  new: {
+    label: "Novo Testamento",
+    icon: "✝️",
+    count: "27 livros",
+    sections: [
+      {
+        name: "Evangelhos",
+        desc: "A vida, morte e ressurreição de Jesus Cristo",
+        books: [
+          { name: "Mateus", ch: 28, desc: "Jesus como Messias esperado por Israel; o Sermão do Monte e o Grande Mandamento." },
+          { name: "Marcos", ch: 16, desc: "O Evangelho mais breve e dinâmico; Jesus como servo poderoso cheio de ação." },
+          { name: "Lucas", ch: 24, desc: "Jesus como Salvador universal dos pobres, excluídos e gentios; rico em parábolas." },
+          { name: "João", ch: 21, desc: "O Evangelho teológico; Jesus como Verbo eterno, sete sinais e longos discursos sobre a vida eterna." },
+        ]
+      },
+      {
+        name: "História Apostólica",
+        desc: "O nascimento e expansão da Igreja",
+        books: [
+          { name: "Atos", ch: 28, desc: "A vinda do Espírito Santo, a Igreja nascente em Jerusalém e a expansão missionária de Paulo pelo Mediterrâneo." },
+        ]
+      },
+      {
+        name: "Cartas de Paulo",
+        desc: "Epístolas teológicas e pastorais do apóstolo Paulo",
+        books: [
+          { name: "Romanos", ch: 16, desc: "Exposição sistemática do evangelho: pecado, justificação pela fé, vida no Espírito e o plano de Deus para Israel." },
+          { name: "1 Coríntios", ch: 16, desc: "Divisões na igreja, imoralidade, dons espirituais e o hino ao amor (cap. 13)." },
+          { name: "2 Coríntios", ch: 13, desc: "Defesa do ministério apostólico de Paulo; poder divino na fraqueza humana." },
+          { name: "Gálatas", ch: 6, desc: "Liberdade em Cristo contra o legalismo; justificação pela fé, não pelas obras da Lei." },
+          { name: "Efésios", ch: 6, desc: "A Igreja como corpo de Cristo; unidade, graça e a armadura espiritual." },
+          { name: "Filipenses", ch: 4, desc: "Carta de alegria escrita da prisão; o hino a Cristo servo (cap. 2) e a paz que excede o entendimento." },
+          { name: "Colossenses", ch: 4, desc: "A supremacia de Cristo sobre toda criação e principados; rejeição de filosofias humanas." },
+          { name: "1 Tessalonicenses", ch: 5, desc: "Encorajamento a jovens cristãos; a volta de Cristo e o arrebatamento dos mortos." },
+          { name: "2 Tessalonicenses", ch: 3, desc: "Correções sobre a vinda do Senhor; o 'homem da iniquidade' e exortação ao trabalho." },
+          { name: "1 Timóteo", ch: 6, desc: "Instruções pastorais para líderes da Igreja: culto, bispo, diácono e falsos ensinos." },
+          { name: "2 Timóteo", ch: 4, desc: "Última carta de Paulo; encoraja Timóteo a perseverar e pregar a Palavra." },
+          { name: "Tito", ch: 3, desc: "Organização da Igreja em Creta; qualidades dos líderes e conduta cristã." },
+          { name: "Filemom", ch: 1, desc: "Pedido pessoal de Paulo pela reconciliação entre Filemom e seu escravo fugido Onésimo." },
+        ]
+      },
+      {
+        name: "Cartas Gerais",
+        desc: "Epístolas destinadas a comunidades mais amplas",
+        books: [
+          { name: "Hebreus", ch: 13, desc: "Jesus como sumo sacerdote eterno, superior a Moisés, anjos e ao sistema levítico; o capítulo da fé (cap. 11)." },
+          { name: "Tiago", ch: 5, desc: "Fé sem obras está morta; sabedoria prática, controle da língua e cuidado com os pobres." },
+          { name: "1 Pedro", ch: 5, desc: "Encorajamento a cristãos perseguidos; sofrimento como Cristo sofreu e esperança viva." },
+          { name: "2 Pedro", ch: 3, desc: "Aviso contra falsos mestres e a certeza da vinda do Dia do Senhor." },
+          { name: "1 João", ch: 5, desc: "Deus é amor; permanência em Cristo, amor fraternal e teste dos espíritos." },
+          { name: "2 João", ch: 1, desc: "Carta breve a uma 'senhora eleita': guardar o mandamento do amor e rejeitar falsos mestres." },
+          { name: "3 João", ch: 1, desc: "Carta de elogio a Gaio pela hospitalidade e advertência a Diótrefes arrogante." },
+          { name: "Judas", ch: 1, desc: "Alerta urgente contra falsos mestres que infiltraram a comunidade cristã." },
+        ]
+      },
+      {
+        name: "Literatura Apocalíptica",
+        desc: "A visão profética do fim dos tempos",
+        books: [
+          { name: "Apocalipse", ch: 22, desc: "Visões de João sobre o julgamento das nações, a grande batalha, a nova Jerusalém e a vitória final de Cristo." },
+        ]
+      },
+    ]
+  }
+};
+
+// ── Pontos em Comum por seção ──────────────────────────────────────────────
+const commonPoints = {
+  old: {
+    "Pentateuco": {
+      subtitle: "O que une Gênesis, Êxodo, Levítico, Números e Deuteronômio",
+      points: [
+        { icon: "✍️", title: "Autoria Mosaica", text: "Todos os cinco livros são tradicionalmente atribuídos a Moisés, formando a base da Lei judaica (Torá). Moisés é o personagem mais central desde Êxodo até Deuteronômio.", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+        { icon: "🤝", title: "A Aliança (Berith)", text: "O tema da aliança de Deus com seu povo perpassa todos os livros: com Adão, Noé e Abraão (Gênesis), renovada no Sinai (Êxodo e Levítico), lembrada no deserto (Números) e reafirmada em Moabe (Deuteronômio).", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+        { icon: "⚖️", title: "Obediência & Consequências", text: "Em todos os livros, a obediência à vontade divina traz bênçãos e a desobediência gera julgamento — um padrão narrativo e teológico constante.", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+        { icon: "🌍", title: "Formação da Identidade de Israel", text: "Os cinco livros narram progressivamente como Israel nasce como povo: das origens patriarcais (Gênesis) à organização como nação com leis, sacerdócio, território prometido e renovação de aliança.", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+        { icon: "🔥", title: "A Presença Divina", text: "Deus se revela ativamente: no jardim do Éden, na sarça ardente, na nuvem e fogo no Sinai, na tenda do encontro e nas instruções diretas a Moisés.", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+        { icon: "📖", title: "Narrativa Contínua", text: "Os cinco livros formam uma história ininterrupta — da criação do mundo à morte de Moisés às portas da Terra Prometida, sem lacunas narrativas.", books: ["Gênesis","Êxodo","Levítico","Números","Deuteronômio"] },
+      ]
+    },
+    "Livros Históricos": {
+      subtitle: "O que une os 12 livros históricos de Israel",
+      points: [
+        { icon: "🔄", title: "Ciclo Apostasia–Julgamento–Restauração", text: "Em especial em Juízes e Reis, repete-se o padrão: Israel abandona a Deus, sofre consequências, clama por ajuda e recebe redenção.", books: ["Juízes","1 Samuel","2 Samuel","1 Reis","2 Reis"] },
+        { icon: "👑", title: "Liderança como Tema Central", text: "Josué, os juízes, Samuel, Saul, Davi, Salomão — todos os livros giram em torno de como os líderes afetam o destino do povo.", books: ["Josué","Juízes","1 Samuel","2 Samuel","1 Reis","2 Reis"] },
+        { icon: "🏛️", title: "A Terra e o Templo", text: "A conquista da terra (Josué), sua perda (2 Reis) e a reconstrução do templo (Esdras) são os grandes marcos que conectam toda a narrativa histórica.", books: ["Josué","1 Reis","2 Reis","Esdras","Neemias"] },
+        { icon: "✍️", title: "Perspectiva Teológica Deuteronomista", text: "Os livros de Josué a 2 Reis avaliam os reis e eventos através da fidelidade à Lei de Moisés — um critério teológico uniforme.", books: ["Josué","Juízes","1 Samuel","2 Samuel","1 Reis","2 Reis"] },
+        { icon: "🌟", title: "Providência Divina na História", text: "Mesmo em Ester — onde Deus nunca é mencionado — os eventos apontam para uma mão providencial que guia o destino de Israel.", books: ["Esdras","Neemias","Ester","Rute"] },
+      ]
+    },
+    "Livros Poéticos": {
+      subtitle: "O que une Jó, Salmos, Provérbios, Eclesiastes e Cânticos",
+      points: [
+        { icon: "🎭", title: "A Experiência Humana em Foco", text: "Ao contrário dos livros históricos, aqui o centro é a vida interior: sofrimento (Jó), louvor (Salmos), sabedoria (Provérbios), dúvida existencial (Eclesiastes) e amor (Cânticos).", books: ["Jó","Salmos","Provérbios","Eclesiastes","Cântico dos Cânticos"] },
+        { icon: "📿", title: "Linguagem Poética e Figurativa", text: "Todos usam paralelismo hebraico, metáforas ricas, símbolos e imagens literárias — um estilo completamente diferente dos livros históricos e proféticos.", books: ["Jó","Salmos","Provérbios","Eclesiastes","Cântico dos Cânticos"] },
+        { icon: "🙏", title: "Relacionamento com Deus", text: "Cada livro explora como o ser humano se relaciona com Deus: na dor (Jó), na adoração (Salmos), na sabedoria prática (Provérbios), na busca de sentido (Eclesiastes) e no amor (Cânticos).", books: ["Jó","Salmos","Provérbios","Eclesiastes","Cântico dos Cânticos"] },
+        { icon: "🧠", title: "Sabedoria como Valor Central", text: "A sabedoria é o fio teológico: temer a Deus é o princípio de toda sabedoria — afirmado explicitamente em Jó, Salmos, Provérbios e Eclesiastes.", books: ["Jó","Salmos","Provérbios","Eclesiastes"] },
+      ]
+    },
+    "Profetas Maiores": {
+      subtitle: "O que une Isaías, Jeremias, Lamentações, Ezequiel e Daniel",
+      points: [
+        { icon: "⚠️", title: "Julgamento e Esperança", text: "Todos alternam mensagens de julgamento severo (por causa da infidelidade de Israel) com promessas de restauração futura e esperança messiânica.", books: ["Isaías","Jeremias","Ezequiel","Daniel"] },
+        { icon: "👁️", title: "Visões e Revelações Sobrenaturais", text: "Isaías vê o trono celestial, Ezequiel tem visões de criaturas e rodas, Daniel interpreta sonhos — todos recebem revelações divinas extraordinárias.", books: ["Isaías","Ezequiel","Daniel"] },
+        { icon: "📣", title: "Mensageiros da Palavra Divina", text: "Todos são chamados por Deus com uma missão específica e transmitem mensagens no formato 'Assim diz o Senhor', afirmando a autoridade divina de seus oráculos.", books: ["Isaías","Jeremias","Ezequiel","Daniel"] },
+        { icon: "🌍", title: "Perspectiva Internacional", text: "Além de Israel e Judá, todos incluem profecias sobre nações estrangeiras — Egito, Babilônia, Assíria — mostrando que o Deus de Israel é Senhor de toda a história.", books: ["Isaías","Jeremias","Ezequiel","Daniel"] },
+      ]
+    },
+    "Profetas Menores": {
+      subtitle: "O que une os 12 profetas menores",
+      points: [
+        { icon: "⚖️", title: "Chamado à Justiça Social", text: "Especialmente Amós, Miquéias e Oseias denunciam a exploração dos pobres, a corrupção dos juízes e a hipocrisia religiosa — exigindo justiça como expressão de fé.", books: ["Amós","Miquéias","Oseias","Habacuque"] },
+        { icon: "📅", title: "O Dia do Senhor", text: "O tema do 'Dia do Senhor' — momento de julgamento divino sobre Israel e as nações — aparece em quase todos os doze livros.", books: ["Joel","Amós","Sofonias","Zacarias","Malaquias","Obadias"] },
+        { icon: "💔", title: "Infidelidade e Amor Restaurador", text: "Oseias usa o casamento como metáfora; Malaquias denuncia o abandono da aliança; mas todos terminam com um apelo ou promessa de restauração.", books: ["Oseias","Joel","Malaquias","Zacarias"] },
+        { icon: "🕊️", title: "Misericórdia Divina Universal", text: "Jonas mostra Deus se preocupando com Nínive, inimiga de Israel — ecoando um princípio presente em vários dos doze: a misericórdia de Deus não tem fronteiras.", books: ["Jonas","Naum","Miquéias"] },
+      ]
+    },
+  },
+  new: {
+    "Evangelhos": {
+      subtitle: "O que une Mateus, Marcos, Lucas e João",
+      points: [
+        { icon: "✝️", title: "Jesus como Centro Absoluto", text: "Os quatro evangelhos narram a vida, ministério, morte e ressurreição de Jesus Cristo — ele é o personagem único e central de todos.", books: ["Mateus","Marcos","Lucas","João"] },
+        { icon: "👑", title: "O Reino de Deus", text: "Todos anunciam o Reino de Deus/dos Céus como o tema central da pregação de Jesus, embora cada evangelho o apresente com ênfases distintas.", books: ["Mateus","Marcos","Lucas","João"] },
+        { icon: "💀", title: "Paixão e Ressurreição", text: "Cada evangelho culmina na narrativa da paixão — prisão, julgamento, crucificação e ressurreição — que ocupa uma proporção desproporcional do texto.", books: ["Mateus","Marcos","Lucas","João"] },
+        { icon: "🎓", title: "Os Doze Discípulos", text: "Todos os evangelhos narram a convocação e o ministério dos doze apóstolos como comunidade fundante em torno de Jesus.", books: ["Mateus","Marcos","Lucas","João"] },
+        { icon: "🔮", title: "Cumprimento das Profecias", text: "Todos apresentam Jesus como cumprimento das Escrituras do Velho Testamento, citando profetas e conectando sua vinda ao plano divino revelado anteriormente.", books: ["Mateus","Marcos","Lucas","João"] },
+      ]
+    },
+    "História Apostólica": {
+      subtitle: "Atos como elo entre Evangelhos e Epístolas",
+      points: [
+        { icon: "🔥", title: "O Espírito Santo em Ação", text: "Atos é o livro do Espírito Santo: Pentecostes, curas, libertações e direções missionárias são todas atribuídas à ação do Espírito.", books: ["Atos"] },
+        { icon: "🌍", title: "Expansão Geográfica do Evangelho", text: "A narrativa se move progressivamente de Jerusalém → Judeia → Samaria → fins da terra, cumprindo o mandato de Atos 1:8.", books: ["Atos"] },
+      ]
+    },
+    "Cartas de Paulo": {
+      subtitle: "O que une as 13 epístolas paulinas",
+      points: [
+        { icon: "✝️", title: "Cristo Crucificado e Ressurrecto", text: "Em todas as cartas, a morte e ressurreição de Jesus são o fundamento teológico de tudo — ética, salvação, esperança e comunidade.", books: ["Romanos","1 Coríntios","2 Coríntios","Gálatas","Efésios","Filipenses","Colossenses"] },
+        { icon: "🙏", title: "Graça e Fé contra Legalismo", text: "Paulo defende em todas as cartas que a salvação vem pela graça por meio da fé — não pelas obras da Lei —, combatendo constantemente o legalismo.", books: ["Romanos","Gálatas","Efésios","Filipenses","Colossenses"] },
+        { icon: "🏛️", title: "Edificação da Igreja Local", text: "Cada carta responde a problemas reais de comunidades específicas — divisões, imoralidade, heresias, questões litúrgicas —, visando a edificação prática da Igreja.", books: ["1 Coríntios","2 Coríntios","1 Timóteo","2 Timóteo","Tito","Filemom"] },
+        { icon: "🕊️", title: "Ética Transformada pelo Evangelho", text: "Todas as cartas incluem seções éticas (parenéticas): como viver à luz do que Cristo fez. A teologia sempre desemboca em conduta.", books: ["Romanos","Efésios","Colossenses","Gálatas","1 Tessalonicenses"] },
+        { icon: "📅", title: "Expectativa da Volta de Cristo", text: "A esperança da volta de Jesus (parusia) orienta a ética e o consolo em praticamente todas as cartas paulinas.", books: ["1 Tessalonicenses","2 Tessalonicenses","Filipenses","Romanos","1 Coríntios"] },
+      ]
+    },
+    "Cartas Gerais": {
+      subtitle: "O que une as epístolas não-paulinas",
+      points: [
+        { icon: "⚠️", title: "Alerta contra Falsos Ensinos", text: "Quase todas as cartas gerais foram escritas em parte para combater heresias ou falsos mestres que infiltravam as comunidades cristãs.", books: ["2 Pedro","1 João","2 João","Judas","Hebreus"] },
+        { icon: "💪", title: "Perseverança sob Perseguição", text: "Tiago, 1 e 2 Pedro e Hebreus exortam os crentes a permanecerem firmes diante de sofrimentos, tribulações e pressão social.", books: ["Tiago","1 Pedro","2 Pedro","Hebreus"] },
+        { icon: "❤️", title: "Fé Ativa e Amor Fraternal", text: "O amor prático entre irmãos e a fé que se manifesta em obras são temas centrais em Tiago, 1 João e nas cartas joaninas.", books: ["Tiago","1 João","2 João","3 João"] },
+        { icon: "🏆", title: "Jesus como Sumo Sacerdote e Rei", text: "Hebreus desenvolve extensamente a superioridade de Cristo sobre a antiga aliança; 1 Pedro e 1 João também afirmam sua realeza e mediação.", books: ["Hebreus","1 Pedro","1 João"] },
+      ]
+    },
+    "Literatura Apocalíptica": {
+      subtitle: "Apocalipse e seu contexto",
+      points: [
+        { icon: "🌟", title: "Cristo Vitorioso", text: "O Apocalipse revela Jesus não como o servo sofredor dos Evangelhos, mas como o Leão de Judá e o Cordeiro glorificado que vence todos os inimigos.", books: ["Apocalipse"] },
+        { icon: "✉️", title: "Sete Cartas às Igrejas", text: "Os capítulos 2-3 contêm sete cartas a igrejas reais da Ásia Menor — combinando linguagem profética com orientação pastoral concreta.", books: ["Apocalipse"] },
+        { icon: "🔗", title: "Conexão com o Velho Testamento", text: "Apocalipse é o livro do NT com mais referências ao VT — Ezequiel, Daniel, Zacarias e Isaías são especialmente presentes, fechando o círculo bíblico.", books: ["Apocalipse"] },
+      ]
+    },
+  }
+};
+
+function showCommonPoints(key, sectionName) {
+  const sec = data[key].sections.find(s => s.name === sectionName);
+  const cp = commonPoints[key][sectionName];
+  if (!cp) return;
+
+  document.getElementById('modalTag').textContent = data[key].label.toUpperCase();
+  document.getElementById('modalTitle').textContent = `Pontos em Comum — ${sectionName}`;
+  document.getElementById('modalSubtitle').textContent = cp.subtitle;
+
+  const grid = document.getElementById('commonGrid');
+  grid.innerHTML = cp.points.map(p => `
+    <div class="common-card">
+      <div class="common-card-title"><span class="ci">${p.icon}</span>${p.title}</div>
+      <div class="common-card-text">${p.text}</div>
+      ${p.books ? `<div class="common-books-list">${p.books.map(b => `<span class="common-book-tag">${b}</span>`).join('')}</div>` : ''}
+    </div>
+  `).join('');
+
+  document.getElementById('commonModal').classList.add('visible');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeCommonModal() {
+  document.getElementById('commonModal').classList.remove('visible');
+  document.body.style.overflow = '';
+}
+
+function closeModal(e) {
+  if (e.target === document.getElementById('commonModal')) closeCommonModal();
+}
+
+function render() {
+  const root = document.getElementById('root');
+  ['old','new'].forEach(key => {
+    const t = data[key];
+    const block = document.createElement('div');
+    block.className = `testament-block ${key}`;
+    block.innerHTML = `
+      <div class="testament-header" onclick="toggleTestament(this)">
+        <span class="t-icon">${t.icon}</span>
+        <div>
+          <div class="t-title">${t.label}</div>
+          <div class="t-count">${t.count} · ${t.sections.length} categorias</div>
+        </div>
+        <span class="expand-arrow">▾</span>
+      </div>
+      <div class="testament-body">
+        <div class="section-list" id="sections-${key}"></div>
+      </div>
+    `;
+    root.appendChild(block);
+
+    const secList = block.querySelector(`#sections-${key}`);
+    t.sections.forEach((sec, si) => {
+      const item = document.createElement('div');
+      item.className = 'section-item';
+      const booksHtml = sec.books.map((b, bi) =>
+        `<div class="book-card" onclick="showInfo(event,'${key}','${si}','${bi}')">
+          <div class="book-name">${b.name}</div>
+          <div class="book-chapters">${b.ch} cap.</div>
+        </div>`
+      ).join('');
+      const hasCommon = commonPoints[key] && commonPoints[key][sec.name];
+      item.innerHTML = `
+        <div class="section-header" onclick="toggleSection(this)">
+          <div class="sec-dot"></div>
+          <div class="sec-name">${sec.name}</div>
+          <span class="sec-count-badge">${sec.books.length} livros</span>
+          <span class="sec-arrow">▶</span>
+        </div>
+        <div class="books-grid">${booksHtml}</div>
+        ${hasCommon ? `<button class="common-btn" onclick="showCommonPoints('${key}','${sec.name}')"><span class="common-btn-icon">🔗</span> Ver pontos em comum desta seção</button>` : ''}
+      `;
+      secList.appendChild(item);
+    });
+  });
+}
+
+function toggleTestament(header) {
+  const block = header.closest('.testament-block');
+  block.classList.toggle('open');
+}
+
+function toggleSection(header) {
+  const item = header.closest('.section-item');
+  item.classList.toggle('open');
+}
+
+let activeCard = null;
+
+function showInfo(e, key, si, bi) {
+  e.stopPropagation();
+  const book = data[key].sections[si].books[bi];
+  const secName = data[key].sections[si].name;
+  const isOld = key === 'old';
+
+  document.getElementById('infoName').textContent = book.name;
+  document.getElementById('infoMeta').textContent = `${data[key].label} · ${secName} · ${book.ch} capítulo${book.ch > 1 ? 's' : ''}`;
+  document.getElementById('infoDesc').textContent = book.desc;
+
+  const tag = document.getElementById('infoTag');
+  tag.textContent = isOld ? 'VELHO TESTAMENTO' : 'NOVO TESTAMENTO';
+  tag.className = `info-tag ${isOld ? 'tag-old' : 'tag-new'}`;
+
+  document.getElementById('infoPanel').classList.add('visible');
+
+  if (activeCard) activeCard.classList.remove('active');
+  activeCard = e.currentTarget;
+  activeCard.classList.add('active');
+}
+
+function closeInfo() {
+  document.getElementById('infoPanel').classList.remove('visible');
+  if (activeCard) { activeCard.classList.remove('active'); activeCard = null; }
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') { closeInfo(); closeCommonModal(); } });
+
+render();
+
+// auto-open both testaments on load
+setTimeout(() => {
+  document.querySelectorAll('.testament-block').forEach(b => b.classList.add('open'));
+}, 400);
+</script>
+</body>
+</html>
