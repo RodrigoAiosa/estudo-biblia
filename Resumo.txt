@@ -1,0 +1,13 @@
+Ramificações da Bíblia Sagrada — Resumo do Sistema
+Este é um explorador visual interativo das 66 divisões da Bíblia, organizado em dois grandes blocos: o Velho Testamento (39 livros) e o Novo Testamento (27 livros).
+Como está organizado
+Cada testamento é dividido em categorias temáticas. O Velho Testamento possui cinco: Pentateuco, Livros Históricos, Livros Poéticos, Profetas Maiores e Profetas Menores. 
+O Novo Testamento possui também cinco: Evangelhos, História Apostólica, Cartas de Paulo, Cartas Gerais e Literatura Apocalíptica.
+O que o usuário pode fazer
+Explorar os livros — Ao clicar em uma categoria, ela se expande e revela todos os livros pertencentes a ela, com o número de capítulos de cada um.
+Ler sobre cada livro — Ao clicar em qualquer livro (ex: Gênesis, Romanos, Apocalipse), abre-se um painel na parte inferior da tela com uma descrição do conteúdo e tema central daquele livro.
+Ver os pontos em comum — Dentro de cada categoria expandida, há um botão "Ver pontos em comum desta seção". Ao clicar, abre-se um painel modal com os temas teológicos, 
+literários e históricos que unem todos os livros daquela seção — por exemplo, o que Gênesis, Êxodo, Levítico, Números e Deuteronômio têm em comum entre si.
+Para que serve
+O sistema é útil para quem quer entender a estrutura geral da Bíblia, identificar como os livros se relacionam dentro de cada grupo, 
+e descobrir os fios condutores que atravessam cada seção — como a aliança no Pentateuco, o ciclo de apostasia nos Livros Históricos, ou a centralidade de Cristo nos quatro Evangelhos.
